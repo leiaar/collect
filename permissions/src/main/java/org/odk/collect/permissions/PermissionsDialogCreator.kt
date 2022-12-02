@@ -48,27 +48,29 @@ internal object PermissionsDialogCreatorImpl : PermissionsDialogCreator {
     }
 
     override fun showAdditionalExplanation(
-        activity: Activity,
-        title: Int,
-        message: Int,
-        drawable: Int,
-        action: PermissionListener
+            activity: Activity,
+            title: Int,
+            message: Int,
+            drawable: Int,
+            action: PermissionListener
     ) {
-        MaterialAlertDialogBuilder(activity)
-            .setIcon(drawable)
-            .setTitle(title)
-            .setMessage(message)
-            .setCancelable(false)
-            .setPositiveButton(R.string.ok) { _, _ ->
-                action.additionalExplanationClosed()
-            }
-            .setNeutralButton(R.string.open_settings) { _, _ ->
-                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.fromParts("package", activity.packageName, null)
-                    activity.startActivity(this)
+        val dialog = MaterialAlertDialogBuilder(activity)
+                .setIcon(drawable)
+                .setTitle(title)
+                .setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton(R.string.ok) { _, _ ->
+                    action.additionalExplanationClosed()
                 }
+                .setNeutralButton(R.string.open_settings) { _, _ ->
+                }
+                .create()
+        dialog.show()
+        dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener {
+            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.fromParts("package", activity.packageName, null)
+                activity.startActivity(this)
             }
-            .create()
-            .show()
+        }
     }
 }
